@@ -92,7 +92,7 @@ namespace RestauranteAPI.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO Bebida (Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts) VALUES (@Nombre, @Dorsal, @Posicion, @Equipo, @Puntos, @Libres, @PorLibres, @DosPts, @TresPutos)";
+                string query = "INSERT INTO JugadoresA (Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts) VALUES (@Nombre, @Dorsal, @Posicion, @Equipo, @Puntos, @Libres, @PorLibres, @DosPts, @TresPts)";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", jugadoresA.Nombre);
@@ -116,7 +116,7 @@ namespace RestauranteAPI.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE Bebida SET Nombre = @Nombre, Precio = @Precio, EsAlcoholica = @EsAlcoholica WHERE JugadorAId = @Id";
+                string query = "UPDATE JugadoresA SET Nombre = @Nombre, Dorsal = @Dorsal, Posicion = @Posicion, Equipo = @Equipo, Puntos = @Puntos, Libres = @Libres, PorLibres = @PorLibres, DosPts = @DosPts, TresPts = @TresPts WHERE JugadorAId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", jugadoresA.JugadorAId);
@@ -135,16 +135,16 @@ namespace RestauranteAPI.Repositories
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(int JugadorAId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "DELETE FROM Bebida WHERE Id = @Id";
+                string query = "DELETE FROM JugadoresA WHERE JugadorAId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", id);
+                    command.Parameters.AddWithValue("@Id", JugadorAId);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -159,22 +159,34 @@ namespace RestauranteAPI.Repositories
 
                 // Comando SQL para insertar datos iniciales
                 var query = @"
-                    INSERT INTO Bebida (Nombre, Precio, EsAlcoholica)
+                    INSERT INTO JugadoresA (Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts)
                     VALUES 
-                    (@Nombre1, @Precio1, @EsAlcoholica1),
-                    (@Nombre2, @Precio2, @EsAlcoholica2)";
+                    (@Nombre1, @Dorsal1, @Posicion1, @Equipo1, @Puntos1, @Libres1, @PorLibres1, @DosPts1, @TresPts1),
+                    (@Nombre2, @Dorsal2, @Posicion2, @Equipo2, @Puntos2, @Libres2, @PorLibres2, @DosPts2, @TresPts2)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
                     // Parámetros para el primer bebida
-                    command.Parameters.AddWithValue("@Nombre1", "Bebida mojada");
-                    command.Parameters.AddWithValue("@Precio1", 4.40);
-                    command.Parameters.AddWithValue("@EsAlcoholica1", 1);
+                    command.Parameters.AddWithValue("@Nombre1", "Amit");
+                    command.Parameters.AddWithValue("@Dorsal1", 4);
+                    command.Parameters.AddWithValue("@Posicion1", "Ala Pivot");
+                    command.Parameters.AddWithValue("@Equipo1", "2ªAragonesa");
+                    command.Parameters.AddWithValue("@Puntos1", 4.40);
+                    command.Parameters.AddWithValue("@Libres1", 2.1);
+                    command.Parameters.AddWithValue("@PorLibres1", 1.2);
+                    command.Parameters.AddWithValue("@DosPts1", 4.40);
+                    command.Parameters.AddWithValue("@TresPts1", 0.2);
 
                     // Parámetros para el segundo bebida
-                    command.Parameters.AddWithValue("@Nombre2", "Bebida húmeda");
-                    command.Parameters.AddWithValue("@Precio2", 5.70);
-                    command.Parameters.AddWithValue("@EsAlcoholica2", 0);
+                    command.Parameters.AddWithValue("@Nombre2", "Mario");
+                    command.Parameters.AddWithValue("@Dorsal2", 23);
+                    command.Parameters.AddWithValue("@Posicion2", "Escolta");
+                    command.Parameters.AddWithValue("@Equipo2", "3ªAragonesa");
+                    command.Parameters.AddWithValue("@Puntos2", 6.33);
+                    command.Parameters.AddWithValue("@Libres2", 3.33);
+                    command.Parameters.AddWithValue("@PorLibres2", "Bebida mojada");
+                    command.Parameters.AddWithValue("@DosPts2", 2.40);
+                    command.Parameters.AddWithValue("@TresPts2", 3.33);
 
                     await command.ExecuteNonQueryAsync();
                 }
