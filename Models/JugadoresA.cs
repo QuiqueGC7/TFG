@@ -11,5 +11,4 @@ public class JugadoresA
     public double DosPts { get; set; }
     public double TresPts { get; set; }
 
-
 }

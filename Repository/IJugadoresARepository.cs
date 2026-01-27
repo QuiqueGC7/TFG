@@ -1,6 +1,6 @@
 using Models;
 
-namespace RestauranteAPI.Repositories
+namespace TFG.Repositories
 {
     public interface IJugadoresARepository
     {

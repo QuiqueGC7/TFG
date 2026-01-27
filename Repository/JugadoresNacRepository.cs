@@ -3,31 +3,31 @@ using Microsoft.Data.SqlClient;
 
 namespace TFG.Repositories
 {
-    public class JugadoresARepository : IJugadoresARepository
+    public class JugadoresNacRepository : IJugadoresNacRepository
     {
         private readonly string _connectionString;
 
-        public JugadoresARepository(IConfiguration configuration)
+        public JugadoresNacRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MambaDB") ?? "Not found";
         }
 
-        public async Task<List<JugadoresA>> GetAllAsync()
+        public async Task<List<JugadoresNac>> GetAllAsync()
         {
-            var JugadoressA = new List<JugadoresA>();
+            var JugadoressNac = new List<JugadoresNac>();
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-
-                string query = "SELECT JugadorAId, Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts FROM JugadoresA";
+//Falta Modificar las querys (Cuando se acabe la BDD)
+                string query = "SELECT JugadorNacId, Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts FROM JugadoresA";
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var JugadoresA = new JugadoresA
+                            var JugadoresNac = new JugadoresNac
                             {
                                 JugadorAId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
@@ -41,17 +41,17 @@ namespace TFG.Repositories
                                 TresPts = reader.GetDecimal(9),
                             }; 
 
-                            JugadoressA.Add(JugadoresA);
+                            JugadoressNac.Add(JugadoresNac);
                         }
                     }
                 }
             }
-            return JugadoressA;
+            return JugadoressNac;
         }
 
-        public async Task<JugadoresA> GetByIdAsync(int JugadorAId)
+        public async Task<JugadoresNac> GetByIdAsync(int JugadorNacId)
         {
-            JugadoresA jugadoresA = null;
+            JugadoresNac jugadoresNac = null;
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -60,15 +60,15 @@ namespace TFG.Repositories
                 string query = "SELECT Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts FROM JugadoresA WHERE JugadorAId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", JugadorAId);
+                    command.Parameters.AddWithValue("@Id", JugadorNacId);
 
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
                         {
-                            jugadoresA = new JugadoresA
+                            jugadoresNac = new JugadoresNac
                             {
-                                JugadorAId = reader.GetInt32(0),
+                                JugadorNacId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
                                 Dorsal = (double)reader.GetDecimal(2),
                                 Posicion = reader.GetBoolean(3),
@@ -83,10 +83,10 @@ namespace TFG.Repositories
                     }
                 }
             }
-            return jugadoresA;
+            return jugadoresNac;
         }
 
-        public async Task AddAsync(JugadoresA jugadoresA)
+        public async Task AddAsync(JugadoresNac jugadoresNac)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -95,22 +95,22 @@ namespace TFG.Repositories
                 string query = "INSERT INTO JugadoresA (Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, PorLibres, DosPts, TresPts) VALUES (@Nombre, @Dorsal, @Posicion, @Equipo, @Puntos, @Libres, @PorLibres, @DosPts, @TresPts)";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Nombre", jugadoresA.Nombre);
-                    command.Parameters.AddWithValue("@Dorsal", jugadoresA.Dorsal);
-                    command.Parameters.AddWithValue("@Posicion", jugadoresA.Posicion);
-                    command.Parameters.AddWithValue("@Equipo", jugadoresA.Equipo);
-                    command.Parameters.AddWithValue("@Puntos", jugadoresA.Puntos);
-                    command.Parameters.AddWithValue("@Libres", jugadoresA.Libres);
-                    command.Parameters.AddWithValue("@PorLibres", jugadoresA.PorLibres);
-                    command.Parameters.AddWithValue("@DosPts", jugadoresA.DosPts);
-                    command.Parameters.AddWithValue("@TresPts", jugadoresA.TresPts);
+                    command.Parameters.AddWithValue("@Nombre", jugadoresNac.Nombre);
+                    command.Parameters.AddWithValue("@Dorsal", jugadoresNac.Dorsal);
+                    command.Parameters.AddWithValue("@Posicion", jugadoresNac.Posicion);
+                    command.Parameters.AddWithValue("@Equipo", jugadoresNac.Equipo);
+                    command.Parameters.AddWithValue("@Puntos", jugadoresNac.Puntos);
+                    command.Parameters.AddWithValue("@Libres", jugadoresNac.Libres);
+                    command.Parameters.AddWithValue("@PorLibres", jugadoresNac.PorLibres);
+                    command.Parameters.AddWithValue("@DosPts", jugadoresNac.DosPts);
+                    command.Parameters.AddWithValue("@TresPts", jugadoresNac.TresPts);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateAsync(JugadoresA jugadoresA)
+        public async Task UpdateAsync(JugadoresNac jugadoresNac)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -119,23 +119,23 @@ namespace TFG.Repositories
                 string query = "UPDATE JugadoresA SET Nombre = @Nombre, Dorsal = @Dorsal, Posicion = @Posicion, Equipo = @Equipo, Puntos = @Puntos, Libres = @Libres, PorLibres = @PorLibres, DosPts = @DosPts, TresPts = @TresPts WHERE JugadorAId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", jugadoresA.JugadorAId);
-                    command.Parameters.AddWithValue("@Nombre", jugadoresA.Nombre);
-                    command.Parameters.AddWithValue("@Dorsal", jugadoresA.Dorsal);
-                    command.Parameters.AddWithValue("@Posicion", jugadoresA.Posicion);
-                    command.Parameters.AddWithValue("@Equipo", jugadoresA.Equipo);
-                    command.Parameters.AddWithValue("@Puntos", jugadoresA.Puntos);
-                    command.Parameters.AddWithValue("@Libres", jugadoresA.Libres);
-                    command.Parameters.AddWithValue("@PorLibres", jugadoresA.PorLibres);
-                    command.Parameters.AddWithValue("@DosPts", jugadoresA.DosPts);
-                    command.Parameters.AddWithValue("@TresPts", jugadoresA.TresPts);
+                    command.Parameters.AddWithValue("@Id", jugadoresNac.JugadorAId);
+                    command.Parameters.AddWithValue("@Nombre", jugadoresNac.Nombre);
+                    command.Parameters.AddWithValue("@Dorsal", jugadoresNac.Dorsal);
+                    command.Parameters.AddWithValue("@Posicion", jugadoresNac.Posicion);
+                    command.Parameters.AddWithValue("@Equipo", jugadoresNac.Equipo);
+                    command.Parameters.AddWithValue("@Puntos", jugadoresNac.Puntos);
+                    command.Parameters.AddWithValue("@Libres", jugadoresNac.Libres);
+                    command.Parameters.AddWithValue("@PorLibres", jugadoresNac.PorLibres);
+                    command.Parameters.AddWithValue("@DosPts", jugadoresNac.DosPts);
+                    command.Parameters.AddWithValue("@TresPts", jugadoresNac.TresPts);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task DeleteAsync(int JugadorAId)
+        public async Task DeleteAsync(int JugadorNacId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -144,7 +144,7 @@ namespace TFG.Repositories
                 string query = "DELETE FROM JugadoresA WHERE JugadorAId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", JugadorAId);
+                    command.Parameters.AddWithValue("@Id", JugadorNacId);
 
                     await command.ExecuteNonQueryAsync();
                 }
