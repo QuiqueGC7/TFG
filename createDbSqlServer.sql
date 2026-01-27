@@ -1,29 +1,31 @@
-CREATE DATABASE RestauranteDB;
+CREATE DATABASE Mamba;
 
 SELECT name, database_id, create_date 
 FROM sys.databases 
-WHERE name = 'RestauranteDB';
+WHERE name = 'Mamba';
 
-USE RestauranteDB;
+USE Mamba;
 
-CREATE TABLE PlatoPrincipal (
+CREATE TABLE Usuarios (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL CHECK (Precio >= 0),
-    Ingredientes NVARCHAR(MAX) NOT NULL
+    Apellidos NVARCHAR(100) NOT NULL,
+    DNI NVARCHAR(10) NOT NULL,
+    Afiliado BIT
 );
 
-CREATE TABLE Postre (
+CREATE TABLE JugadoresNac (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Nombre NVARCHAR(100) NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL CHECK (Precio >= 0),
-    Calorias INT NOT NULL
+    Dorsal INT NOT NULL, 
+    Posicion NVARCHAR(100) NOT NULL,
+    Equipo NVARCHAR(100) NOT NULL
 );
 
-CREATE TABLE Bebida (
+CREATE TABLE EstadisticasNac (
     Id INT IDENTITY(1,1) PRIMARY KEY,
-    Nombre NVARCHAR(100) NOT NULL,
-    Precio DECIMAL(10, 2) NOT NULL CHECK (Precio >= 0),
+    Puntos INT NOT NULL,
+    Libres INT NOT NULL,
     EsAlcoholica BIT
 );
 
