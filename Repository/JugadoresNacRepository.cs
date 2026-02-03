@@ -19,7 +19,6 @@ namespace TFG.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-//Falta Modificar las querys (Cuando se acabe la BDD)
                 string query = "SELECT JugadorNacId, Nombre, Dorsal, Posicion, Equipo, Puntos, Libres, por2Pts, por3Pts, Valoracion, Rebotes, Asistencias FROM JugadoresNac";
                 using (var command = new SqlCommand(query, connection))
                 {
