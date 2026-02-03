@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RestauranteAPI.Models;
-using RestauranteAPI.Services;
+using TFG.Models;
+using TFG.Services;
 
-namespace RestauranteAPI.Controllers
+namespace TFG.Controllers
 {
 [ApiController]
 [Route("[controller]")]
