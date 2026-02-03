@@ -1,6 +1,6 @@
-﻿using RestauranteAPI.Models;
+﻿using TFG.Models;
 
-namespace RestauranteAPI.Repositories
+namespace TFG.Repositories
 {
     public interface IUserRepository
     {

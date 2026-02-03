@@ -1,7 +1,7 @@
 using System.Security.Claims;
-using RestauranteAPI.Models;
+using TFG.Models;
 
-namespace RestauranteAPI.Services
+namespace TFG.Services
 {
     public interface IAuthService
     {

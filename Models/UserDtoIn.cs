@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace RestauranteAPI.Models;
+namespace TFG.Models;
 
 public class UserDtoIn
     {

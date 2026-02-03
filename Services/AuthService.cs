@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Models;
-using RestauranteAPI.Models;
-using RestauranteAPI.Repositories;
+using TFG.Models;
+using TFG.Repositories;
 
-namespace RestauranteAPI.Services
+namespace TFG.Services
 {
     public class AuthService : IAuthService
     {
