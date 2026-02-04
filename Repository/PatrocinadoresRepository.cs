@@ -19,7 +19,7 @@ namespace TFG.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada, Duracion FROM Patrocinadores";
+                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada FROM Patrocinadores";
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -30,8 +30,7 @@ namespace TFG.Repositories
                             {
                                 PatrocinadorId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                CantidadAportada = reader.GetInt32(2),
-                                Duracion = reader.GetInt32(3)
+                                CantidadAportada = reader.GetInt32(2)
                             }; 
 
                             patrocinadores.Add(Patrocinadores);
@@ -50,7 +49,7 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada, Duracion FROM Patrocinadores WHERE PatrocinadorId = @Id";
+                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada FROM Patrocinadores WHERE PatrocinadorId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", PatrocinadorId);
@@ -63,8 +62,7 @@ namespace TFG.Repositories
                             {
                                 PatrocinadorId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                CantidadAportada = reader.GetInt32(2),
-                                Duracion = reader.GetInt32(3)
+                                CantidadAportada = reader.GetInt32(2)
                             };
                         }
                     }
@@ -79,13 +77,11 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO Patrocinadores (Nombre, CantidadAportada, Duracion) VALUES (@Nombre, @CantidadAportada, @Duracion)";
+                string query = "INSERT INTO Patrocinadores (Nombre, CantidadAportada) VALUES (@Nombre, @CantidadAportada)";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", patrocinadores.Nombre);
                     command.Parameters.AddWithValue("@CantidadAportada", patrocinadores.CantidadAportada);
-                    command.Parameters.AddWithValue("@Duracion", patrocinadores.Duracion);
-
                     await command.ExecuteNonQueryAsync();
                 }
             }
@@ -97,12 +93,11 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE Patrocinadores SET Nombre = @Nombre, CantidadAportada = @CantidadAportada, Duracion = @Duracion WHERE PatrocinadorId = @Id";
+                string query = "UPDATE Patrocinadores SET Nombre = @Nombre, CantidadAportada = @CantidadAportada WHERE PatrocinadorId = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", patrocinadores.Nombre);
                     command.Parameters.AddWithValue("@CantidadAportada", patrocinadores.CantidadAportada);
-                    command.Parameters.AddWithValue("@Duracion", patrocinadores.Duracion);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -133,21 +128,19 @@ namespace TFG.Repositories
 
                 // Comando SQL para insertar datos iniciales
                 var query = @"
-                    INSERT INTO Patrocinadores (Nombre, CantidadAportada, Duracion)
+                    INSERT INTO Patrocinadores (Nombre, CantidadAportada)
                     VALUES 
-                    (@Nombre1, @CantidadAportada1, @Duracion1),
-                    (@Nombre2, @CantidadAportada2, @Duracion2)";
+                    (@Nombre1, @CantidadAportada1),
+                    (@Nombre2, @CantidadAportada2)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
                     // Parámetros para el primer bebida
                     command.Parameters.AddWithValue("@Nombre1", "Alfasa");
                     command.Parameters.AddWithValue("@CantidadAportada1", 4000);
-                    command.Parameters.AddWithValue("@Duracion1", "2");
                     // Parámetros para el segundo bebida
                     command.Parameters.AddWithValue("@Nombre2", "LaHora de Montecanal");
                     command.Parameters.AddWithValue("@CantidadAportada2", 1000);
-                    command.Parameters.AddWithValue("@Duracion2", "1");
 
                     await command.ExecuteNonQueryAsync();
                 }

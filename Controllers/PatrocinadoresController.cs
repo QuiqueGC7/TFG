@@ -63,7 +63,6 @@ namespace TFG.Controllers
             // Actualizar el bebida existente
             existingPatrocinadores.Nombre = updatedPatrocinadores.Nombre;
             existingPatrocinadores.CantidadAportada = updatedPatrocinadores.CantidadAportada;
-            existingPatrocinadores.Duracion = updatedPatrocinadores.Duracion;
 
             await _repository.UpdateAsync(existingPatrocinadores);
             return NoContent();
