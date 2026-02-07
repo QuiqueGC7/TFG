@@ -3,54 +3,54 @@ using Microsoft.Data.SqlClient;
 
 namespace TFG.Repositories
 {
-    public class StaffRepository : IStaffRepository
+    public class EquipoRepository : IEquipoRepository
     {
         private readonly string _connectionString;
 
-        public StaffRepository(IConfiguration configuration)
+        public EquipoRepository(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("MambaDB") ?? "Not found";
         }
 
-        public async Task<List<Staff>> GetAllAsync()
+        public async Task<List<Equipo>> GetAllAsync()
         {
-            var Staffs = new List<Staff>();
+            var Equipos = new List<Equipo>();
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT IdStaff, Nombre, Puesto, Equipo FROM Staff";
+                string query = "SELECT IdEquipo, Nombre, Ciudad, Entrenador FROM Equipos";
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var Staff = new Staff
+                            var Equipo = new Equipo
                             {
-                                IdStaff = reader.GetInt32(0),
+                                IdEquipo = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Puesto = reader.GetString(2),
-                                Equipo = reader.GetString(3),
+                                Victorias = reader.GetInt32(2),
+                                Derrotas = reader.GetInt32(3),
                             }; 
 
-                            Staffs.Add(Staff);
+                            Equipos.Add(Equipo);
                         }
                     }
                 }
             }
-            return Staffs;
+            return Equipos;
         }
 
-        public async Task<Staff> GetByIdAsync(int id)
+        public async Task<Equipo> GetByIdAsync(int id)
         {
-            Staff staff = null;
+            Equipo equipo = null;
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT IdStaff, Nombre, Puesto, Equipo FROM Staff WHERE IdStaff = @Id";
+                string query = "SELECT IdEquipo, Nombre, Victorias, Derrotas FROM Equipos WHERE IdEquipo = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -58,68 +58,68 @@ namespace TFG.Repositories
                     {
                         if (await reader.ReadAsync())
                         {
-                            staff = new Staff
+                            equipo = new Equipo
                             {
-                                IdStaff = reader.GetInt32(0),
+                                IdEquipo = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Puesto = reader.GetString(2),
-                                Equipo = reader.GetString(3),
+                                Victorias = reader.GetInt32(2),
+                                Derrotas = reader.GetInt32(3),
                             };
                         }
                     }
                 }
             }
-            return staff;
+            return equipo;
         }
 
-        public async Task AddAsync(Staff staff)
+        public async Task AddAsync(Equipo equipo)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO Staff (Nombre, Puesto, Equipo) VALUES (@Nombre, @Puesto, @Equipo)";
+                string query = "INSERT INTO Equipos (Nombre, Victorias, Derrotas) VALUES (@Nombre, @Victorias, @Derrotas)";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Nombre", staff.Nombre);
-                    command.Parameters.AddWithValue("@Puesto", staff.Puesto);
-                    command.Parameters.AddWithValue("@Equipo", staff.Equipo);
+                    command.Parameters.AddWithValue("@Nombre", equipo.Nombre);
+                    command.Parameters.AddWithValue("@Victorias", equipo.Victorias);
+                    command.Parameters.AddWithValue("@Derrotas", equipo.Derrotas);
+                    command.Parameters.AddWithValue("@Equipo", equipo.Equipo);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateAsync(Staff staff)
+        public async Task UpdateAsync(Equipo equipo)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE Staff SET Nombre = @Nombre, Puesto = @Puesto, Equipo = @Equipo WHERE IdStaff = @Id";
+                string query = "UPDATE Equipos SET Nombre = @Nombre, Victorias = @Victorias, Derrotas = @Derrotas WHERE IdEquipo = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Nombre", staff.Nombre);
-                    command.Parameters.AddWithValue("@Puesto", staff.Puesto);
-                    command.Parameters.AddWithValue("@Equipo", staff.Equipo);
-                    command.Parameters.AddWithValue("@Id", staff.IdStaff);
+                    command.Parameters.AddWithValue("@Nombre", equipo.Nombre);
+                    command.Parameters.AddWithValue("@Victorias", equipo.Victorias);
+                    command.Parameters.AddWithValue("@Derrotas", equipo.Derrotas);
+                    command.Parameters.AddWithValue("@Id", equipo.IdEquipo);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-
-        public async Task DeleteAsync(int idStaff)
+        public async Task DeleteAsync(int idEquipo)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "DELETE FROM Staff WHERE IdStaff = @Id";
+                string query = "DELETE FROM Equipos WHERE IdEquipo = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@Id", idStaff);
+                    command.Parameters.AddWithValue("@Id", idEquipo);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -134,22 +134,22 @@ namespace TFG.Repositories
 
                 // Comando SQL para insertar datos iniciales
                 var query = @"
-                    INSERT INTO Staff (Nombre, Puesto, Equipo)
+                    INSERT INTO Equipos (Nombre, Victorias, Derrotas)
                     VALUES 
-                    (@Nombre1, @Puesto1, @Equipo1),
-                    (@Nombre2, @Puesto2, @Equipo2)";
+                    (@Nombre1, @Victorias1, @Derrotas1),
+                    (@Nombre2, @Victorias2, @Derrotas2)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
                     // Parámetros para el primer bebida
-                    command.Parameters.AddWithValue("@Nombre1", "LLeyda");
-                    command.Parameters.AddWithValue("@Puesto1", "Entrenador");
-                    command.Parameters.AddWithValue("@Equipo1", "NacionalA2");
+                    command.Parameters.AddWithValue("@Nombre1", "NacionalA2");
+                    command.Parameters.AddWithValue("@Victorias1", 10);
+                    command.Parameters.AddWithValue("@Derrotas1", 5);
 
                     // Parámetros para el segundo bebida
-                    command.Parameters.AddWithValue("@Nombre2", "Mario");
-                    command.Parameters.AddWithValue("@Puesto2", "Presidente");
-                    command.Parameters.AddWithValue("@Equipo2", "Mamba");
+                    command.Parameters.AddWithValue("@Nombre2", "2Aragonesa");
+                    command.Parameters.AddWithValue("@Victorias2", 15);
+                    command.Parameters.AddWithValue("@Derrotas2", 3);
 
 
                     await command.ExecuteNonQueryAsync();
@@ -159,5 +159,3 @@ namespace TFG.Repositories
 
 
     }
-
-}

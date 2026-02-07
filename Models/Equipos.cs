@@ -6,7 +6,7 @@ namespace TFG.Models
     {
         public int IdEquipo { get; set; }
         public string Nombre { get; set; }
-        public string Victorias { get; set; }
-        public string Derrotas { get; set; }
+        public int Victorias { get; set; }
+        public int Derrotas { get; set; }
     }
 }
