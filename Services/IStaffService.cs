@@ -1,3 +1,5 @@
+using TFG.Models;
+
 namespace TFG.Services
 {
     public interface IStaffService

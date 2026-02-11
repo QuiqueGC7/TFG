@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
+using TFG.Models;
 
 namespace TFG.Repositories
 {
@@ -31,14 +32,14 @@ namespace TFG.Repositories
                             {
                                 JugadorAId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Dorsal = (double)reader.GetDecimal(2),
-                                Posicion = reader.GetBoolean(3),
+                                Dorsal = reader.GetInt32(2),
+                                Posicion = reader.GetString(3),
                                 Equipo = reader.GetString(4),
-                                Puntos = reader.GetDecimal(5),
+                                Puntos = (double)reader.GetDecimal(5),
                                 Libres = reader.GetInt32(6),
-                                PorLibres = reader.GetDecimal(7),
-                                DosPts = reader.GetDecimal(8),
-                                TresPts = reader.GetDecimal(9),
+                                PorLibres = (double)reader.GetDecimal(7),
+                                DosPts = (double)reader.GetDecimal(8),
+                                TresPts = (double)reader.GetDecimal(9),
                             }; 
 
                             JugadoressA.Add(JugadoresA);
@@ -70,14 +71,14 @@ namespace TFG.Repositories
                             {
                                 JugadorAId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Dorsal = (double)reader.GetDecimal(2),
-                                Posicion = reader.GetBoolean(3),
+                                Dorsal = reader.GetInt32(2),
+                                Posicion = reader.GetString(3),
                                 Equipo = reader.GetString(4),
-                                Puntos = reader.GetDecimal(5),
+                                Puntos = (double)reader.GetDecimal(5),
                                 Libres = reader.GetInt32(6),
-                                PorLibres = reader.GetDecimal(7),
-                                DosPts = reader.GetDecimal(8),
-                                TresPts = reader.GetDecimal(9),
+                                PorLibres = (double)reader.GetDecimal(7),
+                                DosPts = (double)reader.GetDecimal(8),
+                                TresPts = (double)reader.GetDecimal(9),
                             };
                         }
                     }

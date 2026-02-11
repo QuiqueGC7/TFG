@@ -1,11 +1,13 @@
+using TFG.Models;
+
 namespace TFG.Services
 {
     public interface IEquipoService
     {
-        Task<List<Equipo>> GetAllAsync();
-        Task<Equipo?> GetByIdAsync(int id);
-        Task AddAsync(Equipo equipo);
-        Task UpdateAsync(Equipo equipo);
+        Task<List<Equipos>> GetAllAsync();
+        Task<Equipos?> GetByIdAsync(int id);
+        Task AddAsync(Equipos equipo);
+        Task UpdateAsync(Equipos equipo);
         Task DeleteAsync(int id);
         Task InicializarDatosAsync();
 

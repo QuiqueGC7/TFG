@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
+using TFG.Models;
 
 namespace TFG.Repositories
 {
@@ -30,16 +31,16 @@ namespace TFG.Repositories
                             {
                                 JugadorNacId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Dorsal = (double)reader.GetDecimal(2),
-                                Posicion = reader.GetBoolean(3),
+                                Dorsal = reader.GetInt32(2),
+                                Posicion = reader.GetString(3),
                                 Equipo = reader.GetString(4),
-                                Puntos = reader.GetDecimal(5),
+                                Puntos = (double)reader.GetDecimal(5),
                                 Libres = reader.GetInt32(6),
-                                por2Pts = reader.GetDecimal(7),
-                                por3Pts = reader.GetDecimal(8),
-                                Valoracion = reader.GetDecimal(9),
-                                Rebotes = reader.GetDecimal(10),
-                                Asistencias = reader.GetDecimal(11)
+                                por2Pts = (double)reader.GetDecimal(7),
+                                por3Pts = (double)reader.GetDecimal(8),
+                                Valoracion = (double)reader.GetDecimal(9),
+                                Rebotes = (double)reader.GetDecimal(10),
+                                Asistencias = (double)reader.GetDecimal(11)
                             }; 
 
                             JugadoressNac.Add(JugadoresNac);
@@ -71,16 +72,16 @@ namespace TFG.Repositories
                             {
                                 JugadorNacId = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Dorsal = (double)reader.GetDecimal(2),
-                                Posicion = reader.GetBoolean(3),
+                                Dorsal = reader.GetInt32(2),
+                                Posicion = reader.GetString(3),
                                 Equipo = reader.GetString(4),
-                                Puntos = reader.GetDecimal(5),
+                                Puntos = (double)reader.GetDecimal(5),
                                 Libres = reader.GetInt32(6),
-                                por2Pts = reader.GetDecimal(7),
-                                por3Pts = reader.GetDecimal(8),
-                                Valoracion = reader.GetDecimal(9),
-                                Rebotes = reader.GetDecimal(10),
-                                Asistencias = reader.GetDecimal(11)
+                                por2Pts = (double)reader.GetDecimal(7),
+                                por3Pts = (double)reader.GetDecimal(8),
+                                Valoracion = (double)reader.GetDecimal(9),
+                                Rebotes = (double)reader.GetDecimal(10),
+                                Asistencias = (double)reader.GetDecimal(11)
                             };
                         }
                     }

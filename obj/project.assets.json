@@ -2124,11 +2124,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "d:\\Quique-2DAW\\RETO\\TFG\\restaurant_api.csproj",
+      "projectUniqueName": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\restaurant_api.csproj",
       "projectName": "restaurant_api",
-      "projectPath": "d:\\Quique-2DAW\\RETO\\TFG\\restaurant_api.csproj",
+      "projectPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\restaurant_api.csproj",
       "packagesPath": "C:\\Users\\S2-PC00\\.nuget\\packages\\",
-      "outputPath": "d:\\Quique-2DAW\\RETO\\TFG\\obj\\",
+      "outputPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

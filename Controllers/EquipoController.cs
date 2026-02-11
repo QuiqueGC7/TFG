@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using TFG.Models;
 using TFG.Repositories;
 using TFG.Services;
 
@@ -11,7 +12,7 @@ namespace TFG.Controllers
    [Authorize]
    public class EquipoController : ControllerBase
    {
-    private static List<Equipo> Equipos = new List<Equipo>();
+    private static List<Equipos> Equipos = new List<Equipos>();
 
     private readonly IAuthService _authorizationService;
 
@@ -24,7 +25,7 @@ namespace TFG.Controllers
         }
     
         [HttpGet]
-        public async Task<ActionResult<List<Equipo>>> GetEquipo()
+        public async Task<ActionResult<List<Equipos>>> GetEquipo()
         {
           //  var idUser = 1;//Convert.ToInt32(bankAccountQueryParameters.Number);
           //  if (!_authorizationService.HasAccessToResource(idUser, HttpContext.User))
@@ -34,7 +35,7 @@ namespace TFG.Controllers
             return Ok(equipos);
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<Equipo>> GetEquipo(int id)
+        public async Task<ActionResult<Equipos>> GetEquipo(int id)
         {
             var equipo = await _repository.GetByIdAsync(id);
             if (equipo == null)
@@ -45,14 +46,14 @@ namespace TFG.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Equipo>> CreateEquipo(Equipo equipo)
+        public async Task<ActionResult<Equipos>> CreateEquipo(Equipos equipo)
         {
             await _repository.AddAsync(equipo);
-            return CreatedAtAction(nameof(GetEquipo), new { id = equipo.EquipoId }, equipo);
+            return CreatedAtAction(nameof(GetEquipo), new { id = equipo.IdEquipo }, equipo);
         }
 
        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateEquipo(int id, Equipo updatedEquipo)
+        public async Task<IActionResult> UpdateEquipo(int id, Equipos updatedEquipo)
         {
             var existingEquipo = await _repository.GetByIdAsync(id);
             if (existingEquipo == null)
@@ -62,8 +63,8 @@ namespace TFG.Controllers
 
             // Actualizar el equipo existente
             existingEquipo.Nombre = updatedEquipo.Nombre;
-            existingEquipo.CantidadMiembros = updatedEquipo.CantidadMiembros;
-            existingEquipo.FechaFundacion = updatedEquipo.FechaFundacion;
+            existingEquipo.Victorias = updatedEquipo.Victorias;
+            existingEquipo.Derrotas = updatedEquipo.Derrotas;
             await _repository.UpdateAsync(existingEquipo);
             return NoContent();
         }

@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
+using TFG.Models;
 
 namespace TFG.Repositories
 {
@@ -19,7 +20,7 @@ namespace TFG.Repositories
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT IdStaff, Nombre, Puesto, Equipo FROM Staff";
+                string query = "SELECT IdStaff, Nombre, Puesto FROM Staff";
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
@@ -30,8 +31,7 @@ namespace TFG.Repositories
                             {
                                 IdStaff = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Puesto = reader.GetString(2),
-                                Equipo = reader.GetString(3),
+                                Puesto = reader.GetString(2)
                             }; 
 
                             Staffs.Add(Staff);
@@ -50,7 +50,7 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT IdStaff, Nombre, Puesto, Equipo FROM Staff WHERE IdStaff = @Id";
+                string query = "SELECT IdStaff, Nombre, Puesto FROM Staff WHERE IdStaff = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
@@ -62,8 +62,7 @@ namespace TFG.Repositories
                             {
                                 IdStaff = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
-                                Puesto = reader.GetString(2),
-                                Equipo = reader.GetString(3),
+                                Puesto = reader.GetString(2)
                             };
                         }
                     }
@@ -78,12 +77,11 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO Staff (Nombre, Puesto, Equipo) VALUES (@Nombre, @Puesto, @Equipo)";
+                string query = "INSERT INTO Staff (Nombre, Puesto) VALUES (@Nombre, @Puesto)";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", staff.Nombre);
                     command.Parameters.AddWithValue("@Puesto", staff.Puesto);
-                    command.Parameters.AddWithValue("@Equipo", staff.Equipo);
 
                     await command.ExecuteNonQueryAsync();
                 }
@@ -101,7 +99,6 @@ namespace TFG.Repositories
                 {
                     command.Parameters.AddWithValue("@Nombre", staff.Nombre);
                     command.Parameters.AddWithValue("@Puesto", staff.Puesto);
-                    command.Parameters.AddWithValue("@Equipo", staff.Equipo);
                     command.Parameters.AddWithValue("@Id", staff.IdStaff);
 
                     await command.ExecuteNonQueryAsync();
@@ -134,22 +131,20 @@ namespace TFG.Repositories
 
                 // Comando SQL para insertar datos iniciales
                 var query = @"
-                    INSERT INTO Staff (Nombre, Puesto, Equipo)
+                    INSERT INTO Staff (Nombre, Puesto)
                     VALUES 
-                    (@Nombre1, @Puesto1, @Equipo1),
-                    (@Nombre2, @Puesto2, @Equipo2)";
+                    (@Nombre1, @Puesto1),
+                    (@Nombre2, @Puesto2)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
                     // Parámetros para el primer bebida
                     command.Parameters.AddWithValue("@Nombre1", "LLeyda");
                     command.Parameters.AddWithValue("@Puesto1", "Entrenador");
-                    command.Parameters.AddWithValue("@Equipo1", "NacionalA2");
 
                     // Parámetros para el segundo bebida
                     command.Parameters.AddWithValue("@Nombre2", "Mario");
                     command.Parameters.AddWithValue("@Puesto2", "Presidente");
-                    command.Parameters.AddWithValue("@Equipo2", "Mamba");
 
 
                     await command.ExecuteNonQueryAsync();

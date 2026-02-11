@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
+using TFG.Models;
 
 namespace TFG.Repositories
 {
@@ -12,21 +13,21 @@ namespace TFG.Repositories
             _connectionString = configuration.GetConnectionString("MambaDB") ?? "Not found";
         }
 
-        public async Task<List<Equipo>> GetAllAsync()
+        public async Task<List<Equipos>> GetAllAsync()
         {
-            var Equipos = new List<Equipo>();
+            var Equipos = new List<Equipos>();
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
-                string query = "SELECT IdEquipo, Nombre, Ciudad, Entrenador FROM Equipos";
+                string query = "SELECT IdEquipo, Nombre, Victorias, Derrotas FROM Equipos";
                 using (var command = new SqlCommand(query, connection))
                 {
                     using (var reader = await command.ExecuteReaderAsync())
                     {
                         while (await reader.ReadAsync())
                         {
-                            var Equipo = new Equipo
+                            var Equipo = new Equipos
                             {
                                 IdEquipo = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
@@ -42,9 +43,9 @@ namespace TFG.Repositories
             return Equipos;
         }
 
-        public async Task<Equipo> GetByIdAsync(int id)
+        public async Task<Equipos> GetByIdAsync(int id)
         {
-            Equipo equipo = null;
+            Equipos equipo = null;
 
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -58,7 +59,7 @@ namespace TFG.Repositories
                     {
                         if (await reader.ReadAsync())
                         {
-                            equipo = new Equipo
+                            equipo = new Equipos
                             {
                                 IdEquipo = reader.GetInt32(0),
                                 Nombre = reader.GetString(1),
@@ -72,7 +73,7 @@ namespace TFG.Repositories
             return equipo;
         }
 
-        public async Task AddAsync(Equipo equipo)
+        public async Task AddAsync(Equipos equipo)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -84,14 +85,13 @@ namespace TFG.Repositories
                     command.Parameters.AddWithValue("@Nombre", equipo.Nombre);
                     command.Parameters.AddWithValue("@Victorias", equipo.Victorias);
                     command.Parameters.AddWithValue("@Derrotas", equipo.Derrotas);
-                    command.Parameters.AddWithValue("@Equipo", equipo.Equipo);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateAsync(Equipo equipo)
+        public async Task UpdateAsync(Equipos equipo)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
@@ -156,6 +156,5 @@ namespace TFG.Repositories
                 }
             }
         }
-
-
     }
+}

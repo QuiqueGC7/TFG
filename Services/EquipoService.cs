@@ -1,3 +1,4 @@
+using TFG.Models;
 using TFG.Repositories;
 
 namespace TFG.Services
@@ -12,12 +13,12 @@ namespace TFG.Services
             
         }
 
-        public async Task<List<Equipo>> GetAllAsync()
+        public async Task<List<Equipos>> GetAllAsync()
         {
             return await _equipoRepository.GetAllAsync();
         }
 
-        public async Task<Equipo?> GetByIdAsync(int id)
+        public async Task<Equipos?> GetByIdAsync(int id)
         {
             if (id <= 0)
                 throw new ArgumentException("El ID debe ser mayor que cero.");
@@ -25,7 +26,7 @@ namespace TFG.Services
             return await _equipoRepository.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(Equipo equipo)
+        public async Task AddAsync(Equipos equipo)
         {
             if (string.IsNullOrWhiteSpace(equipo.Nombre))
                 throw new ArgumentException("El nombre del equipo no puede estar vacío.");
@@ -39,7 +40,7 @@ namespace TFG.Services
             await _equipoRepository.AddAsync(equipo);
         }
 
-        public async Task UpdateAsync(Equipo equipo)
+        public async Task UpdateAsync(Equipos equipo)
         {
             if (equipo.IdEquipo <= 0)
                 throw new ArgumentException("El ID no es válido para actualización.");
