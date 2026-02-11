@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using RestauranteAPI.Controllers;
-using RestauranteAPI.Repositories;
-using RestauranteAPI.Services;
+using TFG.Controllers;
+using TFG.Repositories;
+using TFG.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -22,14 +22,19 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-var connectionString = builder.Configuration.GetConnectionString("RestauranteDB");
+var connectionString = builder.Configuration.GetConnectionString("MambaDB");
 
-builder.Services.AddScoped<IPlatoPrincipalRepository, PlatoPrincipalRepository>();
-builder.Services.AddScoped<IPostreRepository, PostreRepository>();
-builder.Services.AddScoped<IBebidaRepository, BebidaRepository>();
-builder.Services.AddScoped<IComboRepository, ComboRepository>();
-builder.Services.AddScoped<IPlatoPrincipalService, PlatoPrincipalService>();
+builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
+builder.Services.AddScoped<IJugadoresARepository, JugadoresARepository>();
+builder.Services.AddScoped<IJugadoresNacRepository, JugadoresNacRepository>();
+builder.Services.AddScoped<IPatrocinadoresRepository, PatrocinadoresRepository>();
+builder.Services.AddScoped<IStaffRepository, StaffRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IEquipoService, EquipoService>();
+builder.Services.AddScoped<IJugadoresAService, JugadoresAService>();
+builder.Services.AddScoped<IJugadoresNacService, JugadoresNacService>();
+builder.Services.AddScoped<IPatrocinadoresService, PatrocinadoresService>();
+builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 
