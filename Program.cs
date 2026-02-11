@@ -22,7 +22,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-var connectionString = builder.Configuration.GetConnectionString("MambaDB");
+var connectionString = builder.Configuration.GetConnectionString("MambaTeam");
 
 builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IJugadoresARepository, JugadoresARepository>();

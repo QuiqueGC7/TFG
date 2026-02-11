@@ -2124,9 +2124,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\restaurant_api.csproj",
-      "projectName": "restaurant_api",
-      "projectPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\restaurant_api.csproj",
+      "projectUniqueName": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
+      "projectName": "TFG",
+      "projectPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
       "packagesPath": "C:\\Users\\S2-PC00\\.nuget\\packages\\",
       "outputPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\obj\\",
       "projectStyle": "PackageReference",

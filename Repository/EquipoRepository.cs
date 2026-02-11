@@ -10,7 +10,7 @@ namespace TFG.Repositories
 
         public EquipoRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("MambaDB") ?? "Not found";
+            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "Not found";
         }
 
         public async Task<List<Equipos>> GetAllAsync()
