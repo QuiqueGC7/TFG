@@ -9,7 +9,6 @@ namespace TFG.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   [Authorize]
    public class EquipoController : ControllerBase
    {
     private static List<Equipos> Equipos = new List<Equipos>();
@@ -45,6 +44,7 @@ namespace TFG.Controllers
             return Ok(equipo);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Equipos>> CreateEquipo(Equipos equipo)
         {
@@ -52,7 +52,8 @@ namespace TFG.Controllers
             return CreatedAtAction(nameof(GetEquipo), new { id = equipo.IdEquipo }, equipo);
         }
 
-       [HttpPut("{id}")]
+        [Authorize]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEquipo(int id, Equipos updatedEquipo)
         {
             var existingEquipo = await _repository.GetByIdAsync(id);
@@ -71,8 +72,8 @@ namespace TFG.Controllers
 
         ///Cambio necesario///
   
+       [Authorize]
        [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Admin)]
        public async Task<IActionResult> DeleteEquipo(int id)
        {
            var equipo = await _repository.GetByIdAsync(id);
