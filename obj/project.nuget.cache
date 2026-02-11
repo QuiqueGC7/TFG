@@ -1,8 +1,14 @@
 {
   "version": 2,
+<<<<<<< HEAD
+  "dgSpecHash": "oIWd7dM1ui0=",
+  "success": true,
+  "projectFilePath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
+=======
   "dgSpecHash": "VeBt1Wng1yI=",
   "success": true,
   "projectFilePath": "C:\\DAW\\TFG\\restaurant_api.csproj",
+>>>>>>> 3842443a60fc4e598461c632dcabfd78a81aaab5
   "expectedPackageFiles": [
     "C:\\Users\\garci\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\garci\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

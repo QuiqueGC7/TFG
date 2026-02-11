@@ -9,7 +9,7 @@ namespace TFG.Repositories
 
         public PatrocinadoresRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("MambaDB") ?? "Not found";
+            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "Not found";
         }
 
         public async Task<List<Patrocinadores>> GetAllAsync()

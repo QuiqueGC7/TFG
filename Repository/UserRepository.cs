@@ -9,7 +9,7 @@ namespace TFG.Repositories
 
         public UserRepository(IConfiguration configuration)
         {
-            _connectionString = configuration.GetConnectionString("RestauranteDB") ?? "Not found";;
+            _connectionString = configuration.GetConnectionString("DefaultConnection") ?? "Not found";;
         }
         public void Add(UserDtoIn user) {
             throw new NotImplementedException("Not implemented yet");

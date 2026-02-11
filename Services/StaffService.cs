@@ -1,6 +1,5 @@
-using TFG.Repositories;
 using TFG.Models;
-
+using TFG.Repositories;
 
 namespace TFG.Services
 {
@@ -33,7 +32,7 @@ namespace TFG.Services
                 throw new ArgumentException("El nombre del staff no puede estar vacío.");
 
             if (string.IsNullOrWhiteSpace(staff.Puesto))
-                throw new ArgumentException("El nombre del staff no puede estar vacío.");
+                throw new ArgumentException("El puesto del staff no puede estar vacío.");
 
             await _staffRepository.AddAsync(staff);
         }
@@ -44,10 +43,7 @@ namespace TFG.Services
                 throw new ArgumentException("El ID no es válido para actualización.");
 
             if (string.IsNullOrWhiteSpace(staff.Nombre))
-                throw new ArgumentException("El nombre del staff no puede estar vacío.");
-
-            if (string.IsNullOrWhiteSpace(staff.Puesto))
-                throw new ArgumentException("El puesto del staff no puede estar vacío.");
+                throw new ArgumentException("El nombre del jugador no puede estar vacío.");
 
             await _staffRepository.UpdateAsync(staff);
         }
