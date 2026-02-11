@@ -1,0 +1,67 @@
+## --- Carpetas de compilación ---
+bin/
+obj/
+out/
+Debug/
+Release/
+
+## --- Archivos de usuario y configuración local ---
+*.user
+*.userosscache
+*.suo
+*.sln.docstates
+*.userprefs
+
+## --- Archivos de VS Code ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+## --- Archivos de Visual Studio ---
+.vs/
+
+## --- Archivos de logs ---
+*.log
+
+## --- Archivos temporales ---
+*.tmp
+*.temp
+*.cache
+*.bak
+
+## --- Archivos de dependencias ---
+packages/
+*.nupkg
+*.snupkg
+
+## --- Archivos de publicación ---
+publish/
+*.Publish.xml
+
+## --- Archivos de Rider / JetBrains ---
+.idea/
+*.iml
+
+## --- Sistema operativo ---
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*~
+
+## --- Otros ---
+*.db
+*.sqlite
+*.sqlite3
+.env
+.env.*
