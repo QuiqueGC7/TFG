@@ -33,9 +33,6 @@ namespace TFG.Services
             if (string.IsNullOrWhiteSpace(jugadoresA.Posicion))
                 throw new ArgumentException("La posicion del jugador no puede estar vacío.");
 
-            if (string.IsNullOrWhiteSpace(jugadoresA.Equipo))
-                throw new ArgumentException("El equipo del jugador no puede estar vacío.");
-
             await _jugadoresARepository.AddAsync(jugadoresA);
         }
 

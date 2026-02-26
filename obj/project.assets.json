@@ -2123,19 +2123,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-<<<<<<< HEAD
-      "projectUniqueName": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
-      "projectName": "TFG",
-      "projectPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
-      "packagesPath": "C:\\Users\\S2-PC00\\.nuget\\packages\\",
-      "outputPath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\obj\\",
-=======
-      "projectUniqueName": "C:\\DAW\\TFG\\restaurant_api.csproj",
+      "projectUniqueName": "C:\\DAW\\TFG\\TFG\\restaurant_api.csproj",
       "projectName": "restaurant_api",
-      "projectPath": "C:\\DAW\\TFG\\restaurant_api.csproj",
+      "projectPath": "C:\\DAW\\TFG\\TFG\\restaurant_api.csproj",
       "packagesPath": "C:\\Users\\garci\\.nuget\\packages\\",
-      "outputPath": "C:\\DAW\\TFG\\obj\\",
->>>>>>> 3842443a60fc4e598461c632dcabfd78a81aaab5
+      "outputPath": "C:\\DAW\\TFG\\TFG\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\garci\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -2192,24 +2184,6 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "downloadDependencies": [
-          {
-            "name": "Microsoft.AspNetCore.App.Ref",
-            "version": "[8.0.24, 8.0.24]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Host.win-x64",
-            "version": "[8.0.24, 8.0.24]"
-          },
-          {
-            "name": "Microsoft.NETCore.App.Ref",
-            "version": "[8.0.24, 8.0.24]"
-          },
-          {
-            "name": "Microsoft.WindowsDesktop.App.Ref",
-            "version": "[8.0.24, 8.0.24]"
-          }
-        ],
         "frameworkReferences": {
           "Microsoft.AspNetCore.App": {
             "privateAssets": "none"
@@ -2221,5 +2195,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.103/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problema al leer el archivo de caché C:\\DAW\\TFG\\TFG\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0."
+    }
+  ]
 }

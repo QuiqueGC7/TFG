@@ -1,14 +1,8 @@
 {
   "version": 2,
-<<<<<<< HEAD
-  "dgSpecHash": "oIWd7dM1ui0=",
+  "dgSpecHash": "8pZgAr3D7vo=",
   "success": true,
-  "projectFilePath": "D:\\AAAA-DAW-JaviGarcia\\TFG\\TFG\\TFG.csproj",
-=======
-  "dgSpecHash": "VeBt1Wng1yI=",
-  "success": true,
-  "projectFilePath": "C:\\DAW\\TFG\\restaurant_api.csproj",
->>>>>>> 3842443a60fc4e598461c632dcabfd78a81aaab5
+  "projectFilePath": "C:\\DAW\\TFG\\TFG\\restaurant_api.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\garci\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\garci\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
@@ -51,11 +45,17 @@
     "C:\\Users\\garci\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
     "C:\\Users\\garci\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
     "C:\\Users\\garci\\.nuget\\packages\\system.text.json\\4.7.2\\system.text.json.4.7.2.nupkg.sha512",
-    "C:\\Users\\garci\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\garci\\.nuget\\packages\\microsoft.netcore.app.ref\\8.0.24\\microsoft.netcore.app.ref.8.0.24.nupkg.sha512",
-    "C:\\Users\\garci\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\8.0.24\\microsoft.windowsdesktop.app.ref.8.0.24.nupkg.sha512",
-    "C:\\Users\\garci\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.24\\microsoft.aspnetcore.app.ref.8.0.24.nupkg.sha512",
-    "C:\\Users\\garci\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.24\\microsoft.netcore.app.host.win-x64.8.0.24.nupkg.sha512"
+    "C:\\Users\\garci\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "message": "Problema al leer el archivo de caché C:\\DAW\\TFG\\TFG\\obj\\project.nuget.cache : '<' is an invalid start of a property name. Expected a '\"'. Path: $ | LineNumber: 2 | BytePositionInLine: 0.",
+      "projectPath": "C:\\DAW\\TFG\\TFG\\restaurant_api.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\DAW\\TFG\\TFG\\restaurant_api.csproj",
+      "targetGraphs": []
+    }
+  ]
 }
