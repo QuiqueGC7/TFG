@@ -4,7 +4,7 @@ public class JugadoresNac
     public string Nombre { get; set; }
     public int Dorsal { get; set; }
     public string Posicion { get; set; }
-    public string Equipo { get; set; }
+    public int Equipo { get; set; }
     public double Puntos { get; set; }
     public double Valoracion { get; set; }
     public double Rebotes { get; set; }
