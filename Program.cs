@@ -22,6 +22,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
+
+
 var connectionString = builder.Configuration.GetConnectionString("MambaTeam");
 
 builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
@@ -71,6 +73,16 @@ builder.Services.AddSwaggerGen(opt =>
     });
 });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()   // Permite cualquier origen
+              .AllowAnyMethod()   // Permite GET, POST, PUT, DELETE, etc.
+              .AllowAnyHeader();  // Permite cualquier encabezado (útil para JWT)
+    });
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -81,6 +93,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 
