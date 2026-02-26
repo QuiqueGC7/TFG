@@ -8,7 +8,6 @@ namespace TFG.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   [Authorize]
    public class JugadoresNacController : ControllerBase
    {
     private static List<JugadoresNac> JugadoresNacs = new List<JugadoresNac>();

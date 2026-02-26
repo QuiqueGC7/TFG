@@ -70,7 +70,7 @@ namespace TFG.Controllers
             return NoContent();
         }
 
-        ///Cambio necesario///
+
   
        [Authorize]
        [HttpDelete("{id}")]
