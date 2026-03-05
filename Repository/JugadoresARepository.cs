@@ -89,6 +89,49 @@ namespace TFG.Repositories
     return null;
 }
 
+public async Task<IEnumerable<JugadoresA>> GetByEquipoAsync(int equipoId)
+{
+    var jugadores = new List<JugadoresA>();
+
+    using (var connection = new SqlConnection(_connectionString))
+    {
+        await connection.OpenAsync();
+
+        // Filtramos específicamente por la columna j.idEquipo
+        string query = @"SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo, 
+                         e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts 
+                         FROM JugadoresArag j 
+                         INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador 
+                         WHERE j.idEquipo = @EquipoId";
+        
+        using (var command = new SqlCommand(query, connection))
+        {
+            command.Parameters.AddWithValue("@EquipoId", equipoId);
+
+            using (var reader = await command.ExecuteReaderAsync())
+            {
+                while (await reader.ReadAsync())
+                {
+                    jugadores.Add(new JugadoresA
+                    {
+                        JugadorAId = reader.GetInt32(0),   
+                        Nombre = reader.GetString(1),   
+                        Dorsal = reader.GetInt32(2),     
+                        Posicion = reader.GetString(3),       
+                        Equipo = reader.GetInt32(4),         
+                        Puntos = reader.GetDouble(5),         
+                        Libres = reader.GetDouble(6),         
+                        PorLibres = reader.GetDouble(7),     
+                        DosPts = reader.GetDouble(8),         
+                        TresPts = reader.GetDouble(9)          
+                    }); 
+                }
+            }
+        }
+    }
+    return jugadores;
+}
+
         public async Task AddAsync(JugadoresA jugadoresA)
 {
     using (var connection = new SqlConnection(_connectionString))
