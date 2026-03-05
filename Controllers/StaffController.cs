@@ -9,7 +9,6 @@ namespace TFG.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   [Authorize]
    public class StaffController : ControllerBase
    {
     private static List<Staff> Staffs = new List<Staff>();
@@ -71,7 +70,6 @@ namespace TFG.Controllers
         ///Cambio necesario///
   
        [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Admin)]
        public async Task<IActionResult> DeleteStaff(int id)
        {
            var staff = await _repository.GetByIdAsync(id);

@@ -8,7 +8,6 @@ namespace TFG.Controllers
 {
    [Route("api/[controller]")]
    [ApiController]
-   [Authorize]
    public class PatrocinadoresController : ControllerBase
    {
     private static List<Patrocinadores> Patrocinadoress = new List<Patrocinadores>();
@@ -72,7 +71,6 @@ namespace TFG.Controllers
         ///Cambio necesario///
   
        [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.Admin)]
        public async Task<IActionResult> DeletePatrocinadores(int id)
        {
            var patrocinadores = await _repository.GetByIdAsync(id);

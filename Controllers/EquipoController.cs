@@ -43,8 +43,7 @@ namespace TFG.Controllers
             }
             return Ok(equipo);
         }
-
-        [Authorize]
+        
         [HttpPost]
         public async Task<ActionResult<Equipos>> CreateEquipo(Equipos equipo)
         {
@@ -52,7 +51,6 @@ namespace TFG.Controllers
             return CreatedAtAction(nameof(GetEquipo), new { id = equipo.IdEquipo }, equipo);
         }
 
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateEquipo(int id, Equipos updatedEquipo)
         {
@@ -72,7 +70,6 @@ namespace TFG.Controllers
 
 
   
-       [Authorize]
        [HttpDelete("{id}")]
        public async Task<IActionResult> DeleteEquipo(int id)
        {
