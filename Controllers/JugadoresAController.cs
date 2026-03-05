@@ -38,9 +38,22 @@ namespace TFG.Controllers
             var jugadoresA = await _repository.GetByIdAsync(id);
             if (jugadoresA == null)
             {
-                return NotFound();
+                return NotFound($"No se encontraron jugadores con el ID {id}");
             }
             return Ok(jugadoresA);
+        }
+
+        [HttpGet("equipo/{equipoId}")]
+        public async Task<ActionResult<IEnumerable<JugadoresA>>> GetJugadoresPorEquipo(int equipoId)
+        {
+            var resultado = await _repository.GetByEquipoAsync(equipoId);
+
+            if (resultado == null || !resultado.Any())
+            {
+                return NotFound($"No se encontraron jugadores para el equipo con ID {equipoId}");
+            }
+
+            return Ok(resultado);
         }
 
         [HttpPost]

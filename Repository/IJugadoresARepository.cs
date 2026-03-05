@@ -8,6 +8,7 @@ namespace TFG.Repositories
         Task<JugadoresA?> GetByIdAsync(int id);
         Task AddAsync(JugadoresA jugadoresA);
         Task UpdateAsync(JugadoresA jugadoresA);
+        Task<IEnumerable<JugadoresA>> GetByEquipoAsync(int idEquipo);
         Task DeleteAsync(int id);
         Task InicializarDatosAsync();
     }

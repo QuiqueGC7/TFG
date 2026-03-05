@@ -89,6 +89,46 @@ namespace TFG.Repositories
             }
             return jugadoresNac;
         }
+        public async Task<IEnumerable<JugadoresNac>> GetByEquipoAsync(int equipoId)
+        {
+            var jugadores = new List<JugadoresNac  >();
+
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                // Filtramos específicamente por la columna j.idEquipo
+                string query = @"SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo, e.puntos, e.porLibres, e.por2Pts, e.por3Pts, e.valoracion, e.rebotes, e.asistencias FROM JugadoresNac j INNER JOIN EstadisticasJugadorNac e ON j.idJugador = e.idJugador WHERE j.idEquipo = @EquipoId";
+                
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@EquipoId", equipoId);
+
+                    using (var reader = await command.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            jugadores.Add(new JugadoresNac
+                            {
+                                JugadorNacId = reader.GetInt32(0),
+                                Nombre = reader.GetString(1),
+                                Dorsal = reader.GetInt32(2),
+                                Posicion = reader.GetString(3),
+                                Equipo = reader.GetInt32(4),
+                                Puntos = reader.GetDouble(5),
+                                Libres = reader.GetDouble(6),
+                                por2Pts = reader.GetDouble(7),
+                                por3Pts = reader.GetDouble(8),
+                                Valoracion = reader.GetDouble(9),
+                                Rebotes = reader.GetDouble(10),
+                                Asistencias = reader.GetDouble(11)   
+                            }); 
+                        }
+                    }
+                }
+            }
+            return jugadores;
+        }
 
         public async Task AddAsync(JugadoresNac jugadoresNac)
         {
