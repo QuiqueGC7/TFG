@@ -1,5 +1,9 @@
-create database MambaTeam;
-use MambaTeam;
+IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'MambaTeam')
+    CREATE DATABASE MambaTeam;
+GO
+
+USE MambaTeam;
+GO
 
 create table Equipos (
     idEquipo INT PRIMARY KEY IDENTITY(1,1),
