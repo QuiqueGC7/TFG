@@ -1,5 +1,4 @@
-using System.Data;
-using Microsoft.Data.SqlClient;
+using Npgsql;
 
 namespace TFG.Repositories
 {
@@ -14,152 +13,96 @@ namespace TFG.Repositories
 
         public async Task<List<Patrocinadores>> GetAllAsync()
         {
-            var patrocinadores = new List<Patrocinadores>();
-
-            using (var connection = new SqlConnection(_connectionString))
+            var lista = new List<Patrocinadores>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand("SELECT PatrocinadorId, Nombre, CantidadAportada, Email, Telefono FROM Patrocinadores", connection);
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                await connection.OpenAsync();
-                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada, Email, Telefono FROM Patrocinadores";
-                using (var command = new SqlCommand(query, connection))
+                lista.Add(new Patrocinadores
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            var Patrocinadores = new Patrocinadores
-                            {
-                                PatrocinadorId = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                CantidadAportada = reader.GetInt32(2),
-                                Email = reader.GetString(3),
-                                Telefono = reader.GetInt32(4)
-
-                            }; 
-
-                            patrocinadores.Add(Patrocinadores);
-                        }
-                    }
-                }
+                    PatrocinadorId = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    CantidadAportada = reader.GetInt32(2),
+                    Email = reader.GetString(3),
+                    Telefono = (int)reader.GetInt64(4)
+                });
             }
-            return patrocinadores;
+            return lista;
         }
 
-        public async Task<Patrocinadores> GetByIdAsync(int PatrocinadorId)
+        public async Task<Patrocinadores?> GetByIdAsync(int id)
         {
-            Patrocinadores patrocinadores = null;
-
-            using (var connection = new SqlConnection(_connectionString))
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand("SELECT PatrocinadorId, Nombre, CantidadAportada, Email, Telefono FROM Patrocinadores WHERE PatrocinadorId = @Id", connection);
+            command.Parameters.AddWithValue("@Id", id);
+            using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
             {
-                await connection.OpenAsync();
-
-                string query = "SELECT PatrocinadorId, Nombre, CantidadAportada, Email, Telefono FROM Patrocinadores WHERE PatrocinadorId = @Id";
-                using (var command = new SqlCommand(query, connection))
+                return new Patrocinadores
                 {
-                    command.Parameters.AddWithValue("@Id", PatrocinadorId);
-
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        if (await reader.ReadAsync())
-                        {
-                            patrocinadores = new Patrocinadores
-                            {
-                                PatrocinadorId = reader.GetInt32(0),
-                                Nombre = reader.GetString(1),
-                                CantidadAportada = reader.GetInt32(2),
-                                Email = reader.GetString(3),
-                                Telefono = reader.GetInt32(4)
-                            };
-                        }
-                    }
-                }
+                    PatrocinadorId = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    CantidadAportada = reader.GetInt32(2),
+                    Email = reader.GetString(3),
+                    Telefono = (int)reader.GetInt64(4)
+                };
             }
-            return patrocinadores;
+            return null;
         }
 
-        public async Task AddAsync(Patrocinadores patrocinadores)
+        public async Task AddAsync(Patrocinadores p)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = "INSERT INTO Patrocinadores (Nombre, CantidadAportada, Email, Telefono) VALUES (@Nombre, @CantidadAportada, @Email, @Telefono)";
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Nombre", patrocinadores.Nombre);
-                    command.Parameters.AddWithValue("@CantidadAportada", patrocinadores.CantidadAportada);
-                    command.Parameters.AddWithValue("@Email", patrocinadores.Email);
-                    command.Parameters.AddWithValue("@Telefono", patrocinadores.Telefono);                    
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand("INSERT INTO Patrocinadores (Nombre, CantidadAportada, Email, Telefono) VALUES (@Nombre, @Cantidad, @Email, @Telefono)", connection);
+            command.Parameters.AddWithValue("@Nombre", p.Nombre);
+            command.Parameters.AddWithValue("@Cantidad", p.CantidadAportada);
+            command.Parameters.AddWithValue("@Email", p.Email);
+            command.Parameters.AddWithValue("@Telefono", (long)p.Telefono);
+            await command.ExecuteNonQueryAsync();
         }
 
-        public async Task UpdateAsync(Patrocinadores patrocinadores)
+        public async Task UpdateAsync(Patrocinadores p)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = "UPDATE Patrocinadores SET Nombre = @Nombre, CantidadAportada = @CantidadAportada, Email = @Email, Telefono = @Telefono WHERE PatrocinadorId = @Id";
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Nombre", patrocinadores.Nombre);
-                    command.Parameters.AddWithValue("@CantidadAportada", patrocinadores.CantidadAportada);
-                    command.Parameters.AddWithValue("@Email", patrocinadores.Email);
-                    command.Parameters.AddWithValue("@Telefono", patrocinadores.Telefono);
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand("UPDATE Patrocinadores SET Nombre=@Nombre, CantidadAportada=@Cantidad, Email=@Email, Telefono=@Telefono WHERE PatrocinadorId=@Id", connection);
+            command.Parameters.AddWithValue("@Nombre", p.Nombre);
+            command.Parameters.AddWithValue("@Cantidad", p.CantidadAportada);
+            command.Parameters.AddWithValue("@Email", p.Email);
+            command.Parameters.AddWithValue("@Telefono", (long)p.Telefono);
+            command.Parameters.AddWithValue("@Id", p.PatrocinadorId);
+            await command.ExecuteNonQueryAsync();
         }
 
-        public async Task DeleteAsync(int PatrocinadorId)
+        public async Task DeleteAsync(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                string query = "DELETE FROM Patrocinadores WHERE PatrocinadorId = @Id";
-                using (var command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Id", PatrocinadorId);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand("DELETE FROM Patrocinadores WHERE PatrocinadorId = @Id", connection);
+            command.Parameters.AddWithValue("@Id", id);
+            await command.ExecuteNonQueryAsync();
         }
 
         public async Task InicializarDatosAsync()
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                // Comando SQL para insertar datos iniciales
-                var query = @"
-                    INSERT INTO Patrocinadores (Nombre, CantidadAportada, Email, Telefono)
-                    VALUES 
-                    (@Nombre1, @CantidadAportada1, @Email1, @Telefono1),
-                    (@Nombre2, @CantidadAportada2, @Email2, @Telefono2)";
-
-                using (var command = new SqlCommand(query, connection))
-                {
-                    // Parámetros para el primer bebida
-                    command.Parameters.AddWithValue("@Nombre1", "Alfasa");
-                    command.Parameters.AddWithValue("@CantidadAportada1", 4000);
-                    command.Parameters.AddWithValue("@Email1", "basket@aro.com");
-                    command.Parameters.AddWithValue("@Telefono1", 743892173);
-                    // Parámetros para el segundo bebida
-                    command.Parameters.AddWithValue("@Nombre2", "LaHora de Montecanal");
-                    command.Parameters.AddWithValue("@CantidadAportada2", 1000);
-                    command.Parameters.AddWithValue("@Email2", "empresa@hola.com");
-                    command.Parameters.AddWithValue("@Telefono2", 643903128);
-
-                    await command.ExecuteNonQueryAsync();
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand(@"
+                INSERT INTO Patrocinadores (Nombre, CantidadAportada, Email, Telefono)
+                VALUES (@Nombre1, @Cantidad1, @Email1, @Telefono1), (@Nombre2, @Cantidad2, @Email2, @Telefono2)", connection);
+            command.Parameters.AddWithValue("@Nombre1", "Alfasa");
+            command.Parameters.AddWithValue("@Cantidad1", 4000);
+            command.Parameters.AddWithValue("@Email1", "basket@aro.com");
+            command.Parameters.AddWithValue("@Telefono1", 743892173L);
+            command.Parameters.AddWithValue("@Nombre2", "LaHora de Montecanal");
+            command.Parameters.AddWithValue("@Cantidad2", 1000);
+            command.Parameters.AddWithValue("@Email2", "empresa@hola.com");
+            command.Parameters.AddWithValue("@Telefono2", 643903128L);
+            await command.ExecuteNonQueryAsync();
         }
-
-
     }
-
 }

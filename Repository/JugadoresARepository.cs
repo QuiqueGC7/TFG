@@ -1,6 +1,4 @@
-using System.Data;
-using Microsoft.Data.SqlClient;
-using TFG.Models;
+using Npgsql;
 
 namespace TFG.Repositories
 {
@@ -15,312 +13,183 @@ namespace TFG.Repositories
 
         public async Task<List<JugadoresA>> GetAllAsync()
         {
-            var JugadoressA = new List<JugadoresA>();
-
-            using (var connection = new SqlConnection(_connectionString))
+            var lista = new List<JugadoresA>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand(@"
+                SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo,
+                       e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts
+                FROM JugadoresArag j
+                INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador", connection);
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                await connection.OpenAsync();
-
-                string query = "SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo, e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts FROM JugadoresArag j INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador";
-                
-                using (var command = new SqlCommand(query, connection))
+                lista.Add(new JugadoresA
                 {
-                    using (var reader = await command.ExecuteReaderAsync())
-                    {
-                        while (await reader.ReadAsync())
-                        {
-                            var JugadoresA = new JugadoresA
-                            {
-                                JugadorAId = reader.GetInt32(0),    
-                                Nombre = reader.GetString(1),       
-                                Dorsal = reader.GetInt32(2),       
-                                Posicion = reader.GetString(3),       
-                                Equipo = reader.GetInt32(4),         
-                                Puntos = reader.GetDouble(5),       
-                                Libres = reader.GetDouble(6),        
-                                PorLibres = reader.GetDouble(7),     
-                                DosPts = reader.GetDouble(8),        
-                                TresPts = reader.GetDouble(9)        
-                            }; 
-
-                            JugadoressA.Add(JugadoresA);
-                        }
-                    }
-                }
+                    JugadorAId = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Dorsal = reader.GetInt32(2),
+                    Posicion = reader.GetString(3),
+                    Equipo = reader.GetInt32(4),
+                    Puntos = reader.GetDouble(5),
+                    Libres = reader.GetDouble(6),
+                    PorLibres = reader.GetDouble(7),
+                    DosPts = reader.GetDouble(8),
+                    TresPts = reader.GetDouble(9)
+                });
             }
-            return JugadoressA;
+            return lista;
         }
 
-        public async Task<JugadoresA> GetByIdAsync(int JugadorAId)
-{
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        await connection.OpenAsync();
-
-        string query = "SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo, e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts FROM JugadoresArag j INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador WHERE j.idJugador = @Id";
-        
-        using (var command = new SqlCommand(query, connection))
+        public async Task<JugadoresA?> GetByIdAsync(int id)
         {
-            command.Parameters.AddWithValue("@Id", JugadorAId);
-
-            using (var reader = await command.ExecuteReaderAsync())
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand(@"
+                SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo,
+                       e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts
+                FROM JugadoresArag j
+                INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador
+                WHERE j.idJugador = @Id", connection);
+            command.Parameters.AddWithValue("@Id", id);
+            using var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
             {
-                if (await reader.ReadAsync())
+                return new JugadoresA
                 {
-                    var JugadoresA = new JugadoresA
-                    {
-                        JugadorAId = reader.GetInt32(0),   
-                        Nombre = reader.GetString(1),   
-                        Dorsal = reader.GetInt32(2),     
-                        Posicion = reader.GetString(3),       
-                        Equipo = reader.GetInt32(4),         
-                        Puntos = reader.GetDouble(5),        
-                        Libres = reader.GetDouble(6),        
-                        PorLibres = reader.GetDouble(7),     
-                        DosPts = reader.GetDouble(8),        
-                        TresPts = reader.GetDouble(9)         
-                    }; 
-
-                    return JugadoresA;
-                }
+                    JugadorAId = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Dorsal = reader.GetInt32(2),
+                    Posicion = reader.GetString(3),
+                    Equipo = reader.GetInt32(4),
+                    Puntos = reader.GetDouble(5),
+                    Libres = reader.GetDouble(6),
+                    PorLibres = reader.GetDouble(7),
+                    DosPts = reader.GetDouble(8),
+                    TresPts = reader.GetDouble(9)
+                };
             }
+            return null;
         }
-    }
-    return null;
-}
 
-public async Task<IEnumerable<JugadoresA>> GetByEquipoAsync(int equipoId)
-{
-    var jugadores = new List<JugadoresA>();
-
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        await connection.OpenAsync();
-
-        // Filtramos específicamente por la columna j.idEquipo
-        string query = @"SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo, 
-                         e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts 
-                         FROM JugadoresArag j 
-                         INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador 
-                         WHERE j.idEquipo = @EquipoId";
-        
-        using (var command = new SqlCommand(query, connection))
+        public async Task<IEnumerable<JugadoresA>> GetByEquipoAsync(int equipoId)
         {
+            var lista = new List<JugadoresA>();
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var command = new NpgsqlCommand(@"
+                SELECT j.idJugador, j.nombre, j.dorsal, j.posicion, j.idEquipo,
+                       e.puntos, e.libres, e.porLibres, e.dosPts, e.tresPts
+                FROM JugadoresArag j
+                INNER JOIN EstadisticasJugadorArag e ON j.idJugador = e.idJugador
+                WHERE j.idEquipo = @EquipoId", connection);
             command.Parameters.AddWithValue("@EquipoId", equipoId);
-
-            using (var reader = await command.ExecuteReaderAsync())
+            using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                while (await reader.ReadAsync())
+                lista.Add(new JugadoresA
                 {
-                    jugadores.Add(new JugadoresA
-                    {
-                        JugadorAId = reader.GetInt32(0),   
-                        Nombre = reader.GetString(1),   
-                        Dorsal = reader.GetInt32(2),     
-                        Posicion = reader.GetString(3),       
-                        Equipo = reader.GetInt32(4),         
-                        Puntos = reader.GetDouble(5),         
-                        Libres = reader.GetDouble(6),         
-                        PorLibres = reader.GetDouble(7),     
-                        DosPts = reader.GetDouble(8),         
-                        TresPts = reader.GetDouble(9)          
-                    }); 
-                }
+                    JugadorAId = reader.GetInt32(0),
+                    Nombre = reader.GetString(1),
+                    Dorsal = reader.GetInt32(2),
+                    Posicion = reader.GetString(3),
+                    Equipo = reader.GetInt32(4),
+                    Puntos = reader.GetDouble(5),
+                    Libres = reader.GetDouble(6),
+                    PorLibres = reader.GetDouble(7),
+                    DosPts = reader.GetDouble(8),
+                    TresPts = reader.GetDouble(9)
+                });
             }
+            return lista;
         }
-    }
-    return jugadores;
-}
 
-        public async Task AddAsync(JugadoresA jugadoresA)
-{
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        await connection.OpenAsync();
-        // Usamos una transacción para insertar en las dos tablas de forma segura
-        using (var transaction = connection.BeginTransaction())
+        public async Task AddAsync(JugadoresA jugador)
         {
-            try
-            {
-                string queryJugador = @"
-                    INSERT INTO JugadoresArag (nombre, posicion, idEquipo, dorsal) 
-                    VALUES (@Nombre, @Posicion, @idEquipo, @Dorsal);
-                    SELECT SCOPE_IDENTITY();"; // Recupera el idJugador recién creado
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var transaction = await connection.BeginTransactionAsync();
+            // PostgreSQL usa RETURNING para obtener el id generado
+            using var cmdJugador = new NpgsqlCommand(@"
+                INSERT INTO JugadoresArag (nombre, posicion, idEquipo, dorsal)
+                VALUES (@Nombre, @Posicion, @Equipo, @Dorsal)
+                RETURNING idJugador", connection, transaction);
+            cmdJugador.Parameters.AddWithValue("@Nombre", jugador.Nombre);
+            cmdJugador.Parameters.AddWithValue("@Posicion", jugador.Posicion);
+            cmdJugador.Parameters.AddWithValue("@Equipo", jugador.Equipo);
+            cmdJugador.Parameters.AddWithValue("@Dorsal", jugador.Dorsal);
+            var nuevoId = (int)(await cmdJugador.ExecuteScalarAsync())!;
 
-                int nuevoId;
-                using (var Jugador = new SqlCommand(queryJugador, connection, transaction))
-                {
-                    Jugador.Parameters.AddWithValue("@Nombre", jugadoresA.Nombre);
-                    Jugador.Parameters.AddWithValue("@Posicion", jugadoresA.Posicion);
-                    Jugador.Parameters.AddWithValue("@idEquipo", jugadoresA.Equipo); 
-                    Jugador.Parameters.AddWithValue("@Dorsal", jugadoresA.Dorsal);
-
-                    nuevoId = Convert.ToInt32(await Jugador.ExecuteScalarAsync());
-                }
-
-                //EstadisticasJugadorArag usando el nuevoId
-                string queryStats = @"
-                    INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts)
-                    VALUES (@idJugador, @Puntos, @Libres, @PorLibres, @DosPts, @TresPts)";
-
-                using (var Stats = new SqlCommand(queryStats, connection, transaction))
-                {
-                    Stats.Parameters.AddWithValue("@idJugador", nuevoId);
-                    Stats.Parameters.AddWithValue("@Puntos", jugadoresA.Puntos);
-                    Stats.Parameters.AddWithValue("@Libres", jugadoresA.Libres);
-                    Stats.Parameters.AddWithValue("@PorLibres", jugadoresA.PorLibres);
-                    Stats.Parameters.AddWithValue("@DosPts", jugadoresA.DosPts);
-                    Stats.Parameters.AddWithValue("@TresPts", jugadoresA.TresPts);
-
-                    await Stats.ExecuteNonQueryAsync();
-                }
-
-                transaction.Commit();
-            }
-            catch (Exception)
-            {
-                transaction.Rollback();
-                throw; // Re-lanzar el error para que el Controller lo maneje
-            }
+            using var cmdStats = new NpgsqlCommand(@"
+                INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts)
+                VALUES (@Id, @Puntos, @Libres, @PorLibres, @DosPts, @TresPts)", connection, transaction);
+            cmdStats.Parameters.AddWithValue("@Id", nuevoId);
+            cmdStats.Parameters.AddWithValue("@Puntos", jugador.Puntos);
+            cmdStats.Parameters.AddWithValue("@Libres", jugador.Libres);
+            cmdStats.Parameters.AddWithValue("@PorLibres", jugador.PorLibres);
+            cmdStats.Parameters.AddWithValue("@DosPts", jugador.DosPts);
+            cmdStats.Parameters.AddWithValue("@TresPts", jugador.TresPts);
+            await cmdStats.ExecuteNonQueryAsync();
+            await transaction.CommitAsync();
         }
-    }
-}
 
-        public async Task UpdateAsync(JugadoresA jugadoresA)
-{
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        await connection.OpenAsync();
-
-        using (var transaction = connection.BeginTransaction())
+        public async Task UpdateAsync(JugadoresA jugador)
         {
-            string queryJugador = @"
-                UPDATE JugadoresArag 
-                SET nombre = @Nombre, 
-                    dorsal = @Dorsal, 
-                    posicion = @Posicion, 
-                    idEquipo = @idEquipo 
-                WHERE idJugador = @Id";
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var transaction = await connection.BeginTransactionAsync();
+            using var cmdJugador = new NpgsqlCommand(@"
+                UPDATE JugadoresArag SET nombre=@Nombre, dorsal=@Dorsal, posicion=@Posicion, idEquipo=@Equipo
+                WHERE idJugador=@Id", connection, transaction);
+            cmdJugador.Parameters.AddWithValue("@Id", jugador.JugadorAId);
+            cmdJugador.Parameters.AddWithValue("@Nombre", jugador.Nombre);
+            cmdJugador.Parameters.AddWithValue("@Dorsal", jugador.Dorsal);
+            cmdJugador.Parameters.AddWithValue("@Posicion", jugador.Posicion);
+            cmdJugador.Parameters.AddWithValue("@Equipo", jugador.Equipo);
+            await cmdJugador.ExecuteNonQueryAsync();
 
-            using (var cmdJugador = new SqlCommand(queryJugador, connection, transaction))
-            {
-                cmdJugador.Parameters.AddWithValue("@Id", jugadoresA.JugadorAId);
-                cmdJugador.Parameters.AddWithValue("@Nombre", jugadoresA.Nombre);
-                cmdJugador.Parameters.AddWithValue("@Dorsal", jugadoresA.Dorsal);
-                cmdJugador.Parameters.AddWithValue("@Posicion", jugadoresA.Posicion);
-                cmdJugador.Parameters.AddWithValue("@idEquipo", jugadoresA.Equipo);
-
-                await cmdJugador.ExecuteNonQueryAsync();
-            }
-            string queryStats = @"
-                UPDATE EstadisticasJugadorArag 
-                SET puntos = @Puntos, 
-                    libres = @Libres, 
-                    porLibres = @PorLibres, 
-                    dosPts = @DosPts, 
-                    tresPts = @TresPts 
-                WHERE idJugador = @Id";
-
-            using (var cmdStats = new SqlCommand(queryStats, connection, transaction))
-            {
-                cmdStats.Parameters.AddWithValue("@Id", jugadoresA.JugadorAId);
-                cmdStats.Parameters.AddWithValue("@Puntos", jugadoresA.Puntos);
-                cmdStats.Parameters.AddWithValue("@Libres", jugadoresA.Libres);
-                cmdStats.Parameters.AddWithValue("@PorLibres", jugadoresA.PorLibres);
-                cmdStats.Parameters.AddWithValue("@DosPts", jugadoresA.DosPts);
-                cmdStats.Parameters.AddWithValue("@TresPts", jugadoresA.TresPts);
-
-                await cmdStats.ExecuteNonQueryAsync();
-            }
-
-            transaction.Commit();
+            using var cmdStats = new NpgsqlCommand(@"
+                UPDATE EstadisticasJugadorArag SET puntos=@Puntos, libres=@Libres, porLibres=@PorLibres, dosPts=@DosPts, tresPts=@TresPts
+                WHERE idJugador=@Id", connection, transaction);
+            cmdStats.Parameters.AddWithValue("@Id", jugador.JugadorAId);
+            cmdStats.Parameters.AddWithValue("@Puntos", jugador.Puntos);
+            cmdStats.Parameters.AddWithValue("@Libres", jugador.Libres);
+            cmdStats.Parameters.AddWithValue("@PorLibres", jugador.PorLibres);
+            cmdStats.Parameters.AddWithValue("@DosPts", jugador.DosPts);
+            cmdStats.Parameters.AddWithValue("@TresPts", jugador.TresPts);
+            await cmdStats.ExecuteNonQueryAsync();
+            await transaction.CommitAsync();
         }
-    }
-}
 
-        public async Task DeleteAsync(int JugadorAId)
+        public async Task DeleteAsync(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                using (var transaction = connection.BeginTransaction())
-                {
-                    // 1º las estadísticas relacionadas
-                    string queryStats = "DELETE FROM EstadisticasJugadorArag WHERE idJugador = @Id";
-                    using (var cmdStats = new SqlCommand(queryStats, connection, transaction))
-                    {
-                        cmdStats.Parameters.AddWithValue("@Id", JugadorAId);
-                        await cmdStats.ExecuteNonQueryAsync();
-                    }
-                    string queryJugador = "DELETE FROM JugadoresArag WHERE idJugador = @Id";
-                    using (var cmdJugador = new SqlCommand(queryJugador, connection, transaction))
-                    {
-                        cmdJugador.Parameters.AddWithValue("@Id", JugadorAId);
-                        await cmdJugador.ExecuteNonQueryAsync();
-                    }
-
-                    transaction.Commit();
-                }
-            }
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var transaction = await connection.BeginTransactionAsync();
+            using var cmdStats = new NpgsqlCommand("DELETE FROM EstadisticasJugadorArag WHERE idJugador = @Id", connection, transaction);
+            cmdStats.Parameters.AddWithValue("@Id", id);
+            await cmdStats.ExecuteNonQueryAsync();
+            using var cmdJugador = new NpgsqlCommand("DELETE FROM JugadoresArag WHERE idJugador = @Id", connection, transaction);
+            cmdJugador.Parameters.AddWithValue("@Id", id);
+            await cmdJugador.ExecuteNonQueryAsync();
+            await transaction.CommitAsync();
         }
 
         public async Task InicializarDatosAsync()
-{
-    using (var connection = new SqlConnection(_connectionString))
-    {
-        await connection.OpenAsync();
-
-        using (var transaction = connection.BeginTransaction())
         {
-            string queryJugador1 = @"
-                INSERT INTO JugadoresArag (nombre, posicion, idEquipo, dorsal) 
-                VALUES ('Amit', 'Ala Pivot', 4, 4);
-                SELECT SCOPE_IDENTITY();";
+            using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+            using var transaction = await connection.BeginTransactionAsync();
 
-            int idJugador1;
-            using (var cmd = new SqlCommand(queryJugador1, connection, transaction))
-            {
-                idJugador1 = Convert.ToInt32(await cmd.ExecuteScalarAsync());
-            }
+            using var cmd1 = new NpgsqlCommand(@"
+                INSERT INTO JugadoresArag (nombre, posicion, idEquipo, dorsal) VALUES ('Amit', 'Ala Pivot', 4, 4) RETURNING idJugador", connection, transaction);
+            var id1 = (int)(await cmd1.ExecuteScalarAsync())!;
+            using var stats1 = new NpgsqlCommand(@"
+                INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts) VALUES (@id, 4.40, 2.1, 1.2, 4.40, 0.2)", connection, transaction);
+            stats1.Parameters.AddWithValue("@id", id1);
+            await stats1.ExecuteNonQueryAsync();
 
-            string queryStats1 = @"
-                INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts)
-                VALUES (@id, 4.40, 2.1, 1.2, 4.40, 0.2)";
-            
-            using (var cmd = new SqlCommand(queryStats1, connection, transaction))
-            {
-                cmd.Parameters.AddWithValue("@id", idJugador1);
-                await cmd.ExecuteScalarAsync();
-            }
-
-            string queryJugador2 = @"
-                INSERT INTO JugadoresArag (nombre, posicion, idEquipo, dorsal) 
-                VALUES ('Mario', 'Escolta', 5, 23);
-                SELECT SCOPE_IDENTITY();";
-
-            int idJugador2;
-            using (var cmd = new SqlCommand(queryJugador2, connection, transaction))
-            {
-                idJugador2 = Convert.ToInt32(await cmd.ExecuteScalarAsync());
-            }
-
-            string queryStats2 = @"
-                INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts)
-                VALUES (@id, 6.33, 3.33, 50.0, 2.40, 3.33)";
-            
-            using (var cmd = new SqlCommand(queryStats2, connection, transaction))
-            {
-                cmd.Parameters.AddWithValue("@id", idJugador2);
-                await cmd.ExecuteScalarAsync();
-            }
-
-            transaction.Commit();
+            await transaction.CommitAsync();
         }
     }
-}
-
-
-    }
-
 }
