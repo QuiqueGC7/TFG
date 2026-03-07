@@ -94,7 +94,7 @@ namespace TFG.Repositories
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE Staff SET Nombre = @Nombre, Puesto = @Puesto, Equipo = @Equipo WHERE IdStaff = @Id";
+                string query = "UPDATE Staff SET Nombre = @Nombre, Puesto = @Puesto WHERE IdStaff = @Id";
                 using (var command = new SqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nombre", staff.Nombre);

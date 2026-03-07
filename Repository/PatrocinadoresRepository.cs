@@ -138,8 +138,8 @@ namespace TFG.Repositories
                 var query = @"
                     INSERT INTO Patrocinadores (Nombre, CantidadAportada, Email, Telefono)
                     VALUES 
-                    (@Nombre1, @CantidadAportada1, Email1, Telefono1),
-                    (@Nombre2, @CantidadAportada2, Email2, Telefono2)";
+                    (@Nombre1, @CantidadAportada1, @Email1, @Telefono1),
+                    (@Nombre2, @CantidadAportada2, @Email2, @Telefono2)";
 
                 using (var command = new SqlCommand(query, connection))
                 {
