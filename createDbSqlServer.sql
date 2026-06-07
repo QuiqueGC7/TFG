@@ -357,3 +357,22 @@ INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPt
 VALUES (25, 6.5, 0.2, 50, 0.7, 1.7);
 INSERT INTO EstadisticasJugadorArag (idJugador, puntos, libres, porLibres, dosPts, tresPts)
 VALUES (26, 16.1, 2, 47.6, 3.3, 2.5);
+
+/* USUARIOS */
+
+CREATE TABLE Users (
+    UserId INT PRIMARY KEY IDENTITY(1,1),
+    UserName NVARCHAR(100) NOT NULL UNIQUE,
+    Email NVARCHAR(150) NOT NULL UNIQUE,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    Role NVARCHAR(50) NOT NULL
+);
+
+INSERT INTO Users (UserName, Email, PasswordHash, Role)
+VALUES ('david_vijuesca', 'david@mambateam.com', '1234', 'Admin');
+
+INSERT INTO Users (UserName, Email, PasswordHash, Role)
+VALUES ('adrian_lleyda', 'adrian@mambateam.com', '1234', 'Admin');
+
+INSERT INTO Users (UserName, Email, PasswordHash, Role)
+VALUES ('javier_garcia', 'javier@mambateam.com', '1234', 'Admin');
