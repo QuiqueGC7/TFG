@@ -87,6 +87,25 @@ namespace TFG.Controllers
             return NoContent();
         }
 
+    [HttpPut("estadisticas/{id}")]
+    public async Task<IActionResult> UpdateEstadisticas(int id, [FromBody] EstadisticasAragDto dto)
+    {
+        var jugador = await _repository.GetByIdAsync(id);
+        if (jugador == null)
+            return NotFound();
+
+        jugador.Puntos = dto.Puntos;
+        jugador.Libres = dto.Libres;
+        jugador.PorLibres = dto.PorLibres;
+        jugador.DosPts = dto.DosPts;
+        jugador.TresPts = dto.TresPts;
+
+        await _repository.UpdateAsync(jugador);
+
+        return NoContent();
+    }
+
+
         ///Cambio necesario///
   
        [HttpDelete("{id}")]
