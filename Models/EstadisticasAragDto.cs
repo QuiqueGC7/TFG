@@ -1,8 +1,8 @@
 public class EstadisticasAragDto
 {
-    public double Puntos { get; set; }
-    public double Libres { get; set; }
-    public double PorLibres { get; set; }
-    public double DosPts { get; set; }
-    public double TresPts { get; set; }
+    public double puntos { get; set; }
+    public double libres { get; set; }
+    public double porLibres { get; set; }
+    public double dosPts { get; set; }
+    public double tresPts { get; set; }
 }

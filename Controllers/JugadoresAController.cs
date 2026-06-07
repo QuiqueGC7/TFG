@@ -94,12 +94,11 @@ namespace TFG.Controllers
         if (jugador == null)
             return NotFound();
 
-        jugador.Puntos = dto.Puntos;
-        jugador.Libres = dto.Libres;
-        jugador.PorLibres = dto.PorLibres;
-        jugador.DosPts = dto.DosPts;
-        jugador.TresPts = dto.TresPts;
-
+        jugador.Puntos = dto.puntos;
+        jugador.Libres = dto.libres;
+        jugador.PorLibres = dto.porLibres;
+        jugador.DosPts = dto.dosPts;
+        jugador.TresPts = dto.tresPts;
         await _repository.UpdateAsync(jugador);
 
         return NoContent();
